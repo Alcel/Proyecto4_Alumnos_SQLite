@@ -1,4 +1,4 @@
-package www.iesmurgi.u9_proyprofesoressqlite
+package com.example.proyecto4_alumnos_sqlite
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

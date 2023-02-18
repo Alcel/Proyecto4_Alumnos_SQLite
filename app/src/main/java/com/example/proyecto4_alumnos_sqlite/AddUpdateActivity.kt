@@ -1,10 +1,17 @@
-package www.iesmurgi.u9_proyprofesoressqlite
+package com.example.proyecto4_alumnos_sqlite
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
+import com.example.proyecto4_alumnos_sqlite.DbBitmapUtility
 import com.example.proyecto4_alumnos_sqlite.databinding.ActivityAddUpdateBinding
+import java.io.FileDescriptor
+import java.io.IOException
 
 
 class AddUpdateActivity : AppCompatActivity() {
@@ -22,8 +29,40 @@ class AddUpdateActivity : AppCompatActivity() {
         binding=ActivityAddUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         conexion= BaseDatosProfes(this)
+        binding.button.setOnClickListener {
+            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, 100)
+        }
         cogerDatos()
         setListeners()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        var compro:Bitmap?
+
+        if (resultCode == RESULT_OK && requestCode == 100) {
+            var imageUri = data?.data
+            if (imageUri != null) {
+                compro=uriToBitmap(imageUri)
+                if(compro!=null){
+                    imagen=compro
+                }
+
+            }
+
+        }
+    }
+    private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
+        try {
+            val parcelFileDescriptor = contentResolver.openFileDescriptor(selectedFileUri, "r")
+            val fileDescriptor: FileDescriptor = parcelFileDescriptor!!.fileDescriptor
+            val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            parcelFileDescriptor.close()
+            return image
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
     }
     private fun cogerDatos() {
         val datos = intent.extras
@@ -46,6 +85,7 @@ class AddUpdateActivity : AppCompatActivity() {
         }
     }
     private fun crearRegistro() {
+        var imagenConv = DbBitmapUtility.getBytes(imagen)
         nombre=binding.etNombre.text.toString().trim()
         email=binding.etEmail.text.toString().trim()
         asignatura=binding.etAsignatura.text.toString().trim()
@@ -66,7 +106,7 @@ class AddUpdateActivity : AppCompatActivity() {
             return
         }
         if(!editar){
-            val usuario=Usuarios(1, nombre,asignatura,email,imagen)
+            val usuario=Usuarios(1, nombre,asignatura,email,imagenConv)
             if(conexion.crear(usuario)>-1){
                 finish()
             }
@@ -74,7 +114,7 @@ class AddUpdateActivity : AppCompatActivity() {
                 Toast.makeText(this, "NO se pudo guardar el registro!!!", Toast.LENGTH_SHORT).show()
             }
         }else{
-            val usuario=Usuarios(id, nombre,asignatura, email,imagen)
+            val usuario=Usuarios(id, nombre,asignatura, email,imagenConv)
             if(conexion.update(usuario)>-1){
                 finish()
             }

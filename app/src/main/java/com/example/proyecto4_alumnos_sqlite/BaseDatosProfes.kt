@@ -1,4 +1,4 @@
-package www.iesmurgi.u9_proyprofesoressqlite
+package com.example.proyecto4_alumnos_sqlite
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -22,7 +22,8 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nombre TEXT NOT NULL, " +
                 "asignatura TEXT NOT NULL, "+
-                "email TEXT NOT NULL UNIQUE)"
+                "email TEXT NOT NULL UNIQUE,"+
+                "imagen BLOB NOT NULL)"
 
         bd?.execSQL(q)
            }
@@ -40,6 +41,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
             put("NOMBRE", profe.nombre)
             put ("EMAIL", profe.email)
             put ("ASIGNATURA",profe.asig)
+            put("IMAGEN",profe.imagen)
         }
         val cod=conexion.insert(TABLA, null, valores)
         conexion.close()
@@ -50,6 +52,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
         val lista = mutableListOf<Usuarios>()
         val conexion = this.readableDatabase
         val consulta="SELECT * FROM $TABLA ORDER BY nombre"
+
         try{
             val cursor = conexion.rawQuery(consulta, null)
             if(cursor.moveToFirst()){
@@ -60,6 +63,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
                         cursor.getString(cursor.getColumnIndex("asignatura")),
                         cursor.getString(cursor.getColumnIndex("email")),
                         cursor.getBlob(cursor.getColumnIndex("imagen"))
+
 
                         //array de bytes a imagen
                     )
@@ -102,6 +106,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
             put("NOMBRE", usuario.nombre)
             put("ASIGNATURA",usuario.asig)
             put("EMAIL", usuario.email)
+            put("IMAGEN",usuario.imagen)
         }
         val update = conexion.update(TABLA, valores, "id=?", arrayOf(usuario.id.toString()))
         conexion.close()
@@ -112,13 +117,6 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
         val conexion = this.writableDatabase
         conexion.execSQL(q)
         conexion.close()
-    }
-
-
-    fun getBitmapAsByteArray(bitmap: Bitmap): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(CompressFormat.PNG, 0, outputStream)
-        return outputStream.toByteArray()
     }
 
 

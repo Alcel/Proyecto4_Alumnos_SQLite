@@ -47,12 +47,12 @@
         android:id="@+id/btnCrear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="68dp"
         android:backgroundTint="#009688"
         android:text="Guardar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <Button
         android:id="@+id/btnVolver"
@@ -63,4 +63,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnCrear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnCrear" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="156dp"
+        android:text="Imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

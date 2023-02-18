@@ -1,4 +1,6 @@
-package www.iesmurgi.u9_proyprofesoressqlite
+package com.example.proyecto4_alumnos_sqlite
+
+import android.graphics.Bitmap
 
 data class Usuarios(
     var id:Int?,
