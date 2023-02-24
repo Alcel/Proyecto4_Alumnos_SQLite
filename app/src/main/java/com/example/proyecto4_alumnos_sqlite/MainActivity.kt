@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
         conexion = BaseDatosProfes(this)
         setRecycler()
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private fun setListeners() {
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, AddUpdateActivity::class.java))
+            println("Me meti")
         }
     }
 

@@ -13,8 +13,8 @@ import java.io.ByteArrayOutputStream
 class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null,VERSION){
     companion object{
         const val VERSION=1
-        const val DATABASE="profes.sql"
-        const val TABLA="profes_tb"
+        const val DATABASE="profes123.sql" //Cambio
+        const val TABLA="alumnos_tbbt"   //Cambio
     }
 
     override fun onCreate(bd: SQLiteDatabase?) {
@@ -26,6 +26,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
                 "imagen BLOB NOT NULL)"
 
         bd?.execSQL(q)
+        println("SI")
            }
 
     override fun onUpgrade(bd: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -45,6 +46,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
         }
         val cod=conexion.insert(TABLA, null, valores)
         conexion.close()
+        println("Exito")
         return cod
     }
     @SuppressLint("Range")
@@ -53,9 +55,11 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
         val conexion = this.readableDatabase
         val consulta="SELECT * FROM $TABLA ORDER BY nombre"
 
+
         try{
             val cursor = conexion.rawQuery(consulta, null)
             if(cursor.moveToFirst()){
+
                 do{
                     val usuario=Usuarios(
                         cursor.getInt(cursor.getColumnIndex("id")),
@@ -63,8 +67,6 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
                         cursor.getString(cursor.getColumnIndex("asignatura")),
                         cursor.getString(cursor.getColumnIndex("email")),
                         cursor.getBlob(cursor.getColumnIndex("imagen"))
-
-
                         //array de bytes a imagen
                     )
                     lista.add(usuario)
@@ -109,6 +111,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
             put("IMAGEN",usuario.imagen)
         }
         val update = conexion.update(TABLA, valores, "id=?", arrayOf(usuario.id.toString()))
+        println("Actualizao")
         conexion.close()
         return  update
     }

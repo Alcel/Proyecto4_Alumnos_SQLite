@@ -4,11 +4,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ImageView
 import android.widget.Toast
-import com.example.proyecto4_alumnos_sqlite.DbBitmapUtility
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.drawToBitmap
 import com.example.proyecto4_alumnos_sqlite.databinding.ActivityAddUpdateBinding
 import java.io.FileDescriptor
 import java.io.IOException
@@ -20,7 +21,7 @@ class AddUpdateActivity : AppCompatActivity() {
     var asignatura=""
     var email=""
     var id: Int? = null
-    lateinit var imagen:Bitmap
+    lateinit var imagen:ImageView
     lateinit var conexion: BaseDatosProfes
     var editar = false
 
@@ -29,6 +30,7 @@ class AddUpdateActivity : AppCompatActivity() {
         binding=ActivityAddUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         conexion= BaseDatosProfes(this)
+        imagen=binding.imageView2
         binding.button.setOnClickListener {
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(gallery, 100)
@@ -38,15 +40,16 @@ class AddUpdateActivity : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var compro:Bitmap?
+        var compro:Bitmap
 
         if (resultCode == RESULT_OK && requestCode == 100) {
             var imageUri = data?.data
             if (imageUri != null) {
-                compro=uriToBitmap(imageUri)
-                if(compro!=null){
-                    imagen=compro
-                }
+               // compro= uriToBitmap(imageUri)!!
+               // val resizedBitmap = Bitmap.createScaledBitmap(compro, 250, 250, true)
+                //if(compro!=null){
+                    imagen.setImageURI(imageUri)
+              //  }
 
             }
 
@@ -72,8 +75,9 @@ class AddUpdateActivity : AppCompatActivity() {
             val usuario = datos.getSerializable("USUARIO") as Usuarios
             id=usuario.id
             binding.etNombre.setText(usuario.nombre)
-            binding.etAsignatura.setText(usuario.asig)//No esta en el esqueleto
+            binding.etAsignatura.setText(usuario.asig)
             binding.etEmail.setText(usuario.email)
+            binding.imageView2.setImageBitmap(DbBitmapUtility.getImage(usuario.imagen))
         }
     }
     private fun setListeners() {
@@ -85,7 +89,7 @@ class AddUpdateActivity : AppCompatActivity() {
         }
     }
     private fun crearRegistro() {
-        var imagenConv = DbBitmapUtility.getBytes(imagen)
+        var imagenConv = DbBitmapUtility.getBytes(imagen.drawToBitmap())
         nombre=binding.etNombre.text.toString().trim()
         email=binding.etEmail.text.toString().trim()
         asignatura=binding.etAsignatura.text.toString().trim()
@@ -116,6 +120,7 @@ class AddUpdateActivity : AppCompatActivity() {
         }else{
             val usuario=Usuarios(id, nombre,asignatura, email,imagenConv)
             if(conexion.update(usuario)>-1){
+                println("ME meti2")
                 finish()
             }
             else{

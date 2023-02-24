@@ -12,10 +12,13 @@ class UsuariosViewHolder (vista: View):RecyclerView.ViewHolder(vista){
                onItemDelete:(Int)->Unit,
                onItemUpdate:(Usuarios)->Unit)
     {
+        var imgConv = DbBitmapUtility.getImage(profesor.imagen)
         miBinding.tvId.text=profesor.id.toString()
         miBinding.tvNombre.text=profesor.nombre
         miBinding.tvAsignatura.text=profesor.asig
         miBinding.tvEmail.text=profesor.email
+        miBinding.imageView.setImageBitmap(imgConv)
+
         miBinding.btnBorrar.setOnClickListener{
         onItemDelete(adapterPosition)
         }
