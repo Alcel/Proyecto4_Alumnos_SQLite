@@ -6,7 +6,7 @@ import com.example.proyecto4_alumnos_sqlite.databinding.UsuariosEsqueletoBinding
 
 
 class UsuariosViewHolder (vista: View):RecyclerView.ViewHolder(vista){
-  //  private val miBinding=UsuariosLayoutBinding.bind(vista)
+    //  private val miBinding=UsuariosLayoutBinding.bind(vista)
     private val miBinding= UsuariosEsqueletoBinding.bind(vista)
     fun inflar(profesor: Usuarios,
                onItemDelete:(Int)->Unit,
@@ -20,7 +20,7 @@ class UsuariosViewHolder (vista: View):RecyclerView.ViewHolder(vista){
         miBinding.imageView.setImageBitmap(imgConv)
 
         miBinding.btnBorrar.setOnClickListener{
-        onItemDelete(adapterPosition)
+            onItemDelete(adapterPosition)
         }
         itemView.setOnClickListener { onItemUpdate(profesor) }
     }

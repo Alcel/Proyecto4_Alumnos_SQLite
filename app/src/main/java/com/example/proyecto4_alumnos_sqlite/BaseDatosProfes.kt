@@ -27,7 +27,7 @@ class BaseDatosProfes(contexto: Context):SQLiteOpenHelper(contexto,DATABASE,null
 
         bd?.execSQL(q)
         println("SI")
-           }
+    }
 
     override fun onUpgrade(bd: SQLiteDatabase?, p1: Int, p2: Int) {
         val q="DROP TABLE IF EXISTS $TABLA"
